@@ -32,6 +32,22 @@ const createUserSession = async (userId: IUser["id"], remember: boolean, redirec
     });
 };
 
+export const getUserInfoFromSession = async (request: Request): Promise<IUser | null> => {
+    const userId = await requireUserSession(request);
+
+    if (userId) {
+        const user = await prisma.user.findUnique({ where: { id: userId } });
+
+        if (user) {
+            return user;
+        } else {
+            return null;
+        }
+    } else {
+        return null;
+    }
+};
+
 export const getUserFromSession = async (request: Request): Promise<string | null> => {
     const session = await sessionStorage.getSession(request.headers.get("Cookie"));
 
