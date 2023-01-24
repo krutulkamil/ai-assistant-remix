@@ -1,29 +1,75 @@
 import {
+    Link,
     Links,
     LiveReload,
     Meta,
     Outlet,
     Scripts,
-    ScrollRestoration
+    ScrollRestoration,
+    useCatch
 } from "@remix-run/react";
 import styles from "./styles/app.css";
-import type { FunctionComponent } from "react";
-import type { LinksFunction, MetaFunction } from "@remix-run/node";
+import Error from "~/components/util/Error";
+import type { FunctionComponent, ReactNode } from "react";
+import type { ErrorBoundaryComponent, LinksFunction, MetaFunction } from "@remix-run/node";
+import type { CatchBoundaryComponent } from "@remix-run/react/dist/routeModules";
 
-const App: FunctionComponent = (): JSX.Element => {
+interface DocumentProps {
+    title?: string;
+    children: ReactNode;
+}
+
+const Document: FunctionComponent<DocumentProps> = ({ title, children}): JSX.Element => {
     return (
-        <html lang="en">
+        <html lang="en" className="h-full">
         <head>
+            {title && <title>{title}</title>}
             <Meta />
             <Links />
         </head>
-        <body>
-        <Outlet />
+        <body className="min-h-screen bg-slate-900 px-4 sm:px-6">
+        {children}
         <ScrollRestoration />
         <Scripts />
         <LiveReload />
         </body>
         </html>
+    );
+};
+
+const App: FunctionComponent = (): JSX.Element => {
+    return (
+        <Document>
+            <Outlet />
+        </Document>
+    );
+};
+
+export const CatchBoundary: CatchBoundaryComponent = (): JSX.Element => {
+    const caughtResponse = useCatch();
+
+    return (
+        <Document title={caughtResponse.statusText}>
+            <main>
+                <Error title={caughtResponse.statusText}>
+                    <p className="mt-2">{caughtResponse.data?.message || "Something went wrong. Please try again later."}</p>
+                    <p className="mt-2">Back to <Link to="/" className="underline">safety</Link>.</p>
+                </Error>
+            </main>
+        </Document>
+    );
+};
+
+export const ErrorBoundary: ErrorBoundaryComponent = ({ error }): JSX.Element => {
+    return (
+        <Document title="An error occurred.">
+            <main>
+                <Error title="An error occurred.">
+                    <p className="mt-2">{error.message || "Something went wrong. Please try again later."}</p>
+                    <p className="mt-2">Back to <Link to="/" className="underline">safety</Link>.</p>
+                </Error>
+            </main>
+        </Document>
     );
 };
 
