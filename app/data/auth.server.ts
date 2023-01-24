@@ -12,18 +12,22 @@ const sessionStorage: SessionStorage = createCookieSessionStorage({
         secure: process.env.NODE_ENV === "production",
         secrets: [SESSION_SECRET],
         sameSite: "lax",
-        maxAge: 24 * 60 * 60, // 1 day
+        maxAge: 0,
         httpOnly: true
     }
 });
 
-const createUserSession = async (userId: IUser["id"], redirectPath: string): Promise<Response> => {
+const createUserSession = async (userId: IUser["id"], remember: boolean, redirectPath: string): Promise<Response> => {
     const session = await sessionStorage.getSession();
     session.set("userId", userId);
 
     return redirect(redirectPath, {
         headers: {
-            "Set-Cookie": await sessionStorage.commitSession(session)
+            "Set-Cookie": await sessionStorage.commitSession(session, {
+                maxAge: remember
+                    ? 60 * 60 * 24 * 7 // 7 days
+                    : 60 * 60 * 24 // 1 day
+            })
         }
     });
 };
@@ -62,8 +66,9 @@ export const requireUserSession = async (request: Request) => {
 
 export const signup = async ({
                                  email,
-                                 password
-                             }: { email: IUser["email"], password: IUser["password"] }): Promise<Response> => {
+                                 password,
+                                 remember
+                             }: { email: IUser["email"], password: IUser["password"], remember: boolean }): Promise<Response> => {
     const existingUser: IUser | null = await prisma.user.findFirst({ where: { email } });
 
     if (existingUser) {
@@ -73,13 +78,14 @@ export const signup = async ({
     const passwordHash: string = await hash(password, 12);
 
     const user = await prisma.user.create({ data: { email, password: passwordHash } });
-    return await createUserSession(user.id, "/expenses");
+    return await createUserSession(user.id, remember, "/");
 };
 
 export const login = async ({
                                 email,
-                                password
-                            }: { email: IUser["email"], password: IUser["password"] }): Promise<Response | undefined> => {
+                                password,
+                                remember
+                            }: { email: IUser["email"], password: IUser["password"], remember: boolean }): Promise<Response | undefined> => {
     const existingUser: IUser | null = await prisma.user.findFirst({ where: { email } });
 
     if (!existingUser) {
@@ -91,6 +97,13 @@ export const login = async ({
             throwErrorResponse("Could not log you in, please check the provided credentials.", 401);
         }
 
-        return await createUserSession(existingUser.id, "/expenses");
+        return await createUserSession(existingUser.id, remember, "/");
     }
+};
+
+export const updateTokens = async (id: IUser["id"], newTokens: IUser["tokens"]) => {
+    return prisma.user.update({
+        where: { id },
+        data: { tokens: newTokens }
+    });
 };

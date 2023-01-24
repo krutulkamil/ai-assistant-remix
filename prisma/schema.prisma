@@ -11,7 +11,19 @@ datasource db {
 }
 
 model User {
-  id       String @id @default(auto()) @map("_id") @db.ObjectId
-  email    String @unique
-  password String
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  email       String       @unique
+  password    String
+  completions Completion[]
+  tokens      Int          @default(10000)
+}
+
+model Completion {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  prompt    String
+  answer    String
+  tokens    Int
+  user      User     @relation(fields: [userId], references: [id])
+  userId    String   @db.ObjectId
+  createdAt DateTime @default(now())
 }
