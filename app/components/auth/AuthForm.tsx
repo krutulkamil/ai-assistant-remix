@@ -1,5 +1,6 @@
 import { Form, Link, useSearchParams, useNavigation, useActionData } from "@remix-run/react";
 import { useEffect, useRef } from "react";
+import { Button, Input } from "@material-tailwind/react";
 import type { FunctionComponent } from "react";
 import type { Navigation } from "@remix-run/router";
 import type { IUserValidationError } from "~/types/user";
@@ -33,24 +34,19 @@ const AuthForm: FunctionComponent = (): JSX.Element => {
             <div className="mx-auto w-full max-w-lg px-8">
                 <Form method="post" className="space-y-6">
                     <div>
-                        <label
-                            htmlFor="email"
-                            className="block text-sm font-medium text-slate-300"
-                        >
-                            Email address
-                        </label>
                         <div className="mt-1">
-                            <input
+                            <Input
                                 ref={emailRef}
+                                label="Email address"
                                 id="email"
                                 required
                                 autoFocus={true}
                                 name="email"
                                 type="email"
-                                autoComplete="email"
+                                autoComplete="off"
                                 aria-invalid={validationErrors?.email ? true : undefined}
                                 aria-describedby="email-error"
-                                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                                className="w-full rounded border border-gray-500 px-2 !text-white"
                             />
                             {validationErrors?.email && (
                                 <div className="pt-1 text-red-700" id="email-error">
@@ -61,39 +57,35 @@ const AuthForm: FunctionComponent = (): JSX.Element => {
                     </div>
 
                     <div>
-                        <label
-                            htmlFor="password"
-                            className="block text-sm font-medium text-slate-300"
-                        >
-                            Password
-                        </label>
                         <div className="mt-1">
-                            <input
+                            <Input
                                 id="password"
                                 ref={passwordRef}
+                                label="Password"
                                 name="password"
+                                required
                                 type="password"
-                                autoComplete="current-password"
                                 aria-invalid={validationErrors?.password ? true : undefined}
+                                autoComplete="off"
                                 aria-describedby="password-error"
-                                className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
+                                className="w-full rounded border border-gray-500 px-2 !text-white"
                                 minLength={7}
                                 maxLength={30}
                             />
                             {(validationErrors?.password || validationErrors?.credentials) && (
-                                <div className="pt-1 text-red-700" id="password-error">
+                                <div className="mt-4 text-red-700 text-sm" id="password-error">
                                     {validationErrors?.password || validationErrors?.credentials}
                                 </div>
                             )}
                         </div>
                     </div>
-                    <button
+                    <Button
                         type="submit"
-                        className="w-full rounded bg-blue-500  py-2 px-4 text-white hover:bg-blue-600 focus:bg-blue-400"
+                        className="w-full rounded py-3 px-4"
                         disabled={isSubmitting}
                     >
                         {isSubmitting ? "Authenticating..." : submitButtonCaption}
-                    </button>
+                    </Button>
                     <div className="flex items-center justify-between">
                         <div className="flex items-center">
                             <input

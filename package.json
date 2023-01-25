@@ -10,6 +10,7 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@material-tailwind/react": "^1.2.5",
     "@prisma/client": "^4.9.0",
     "@remix-run/node": "^1.11.0",
     "@remix-run/react": "^1.11.0",

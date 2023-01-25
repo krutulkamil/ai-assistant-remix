@@ -29,7 +29,7 @@ const Document: FunctionComponent<DocumentProps> = ({ title, children}): JSX.Ele
             <Meta />
             <Links />
         </head>
-        <body className="min-h-screen bg-slate-900 px-4 sm:px-6">
+        <body className="min-h-screen bg-blue-gray-900 px-4 sm:px-6">
         {children}
         <ScrollRestoration />
         <Scripts />
