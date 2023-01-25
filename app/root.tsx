@@ -8,7 +8,9 @@ import {
     ScrollRestoration,
     useCatch
 } from "@remix-run/react";
-import styles from "./styles/app.css";
+import tailwindStyles from "./styles/app.css";
+import globalStyles from "./styles/global.css";
+import tooltipStyles from "react-tooltip/dist/react-tooltip.css";
 import Error from "~/components/util/Error";
 import type { FunctionComponent, ReactNode } from "react";
 import type { ErrorBoundaryComponent, LinksFunction, MetaFunction } from "@remix-run/node";
@@ -80,7 +82,11 @@ export const meta: MetaFunction = () => ({
 });
 
 export const links: LinksFunction = () => {
-    return [{ rel: "stylesheet", href: styles }];
+    return [
+        { rel: "stylesheet", href: tailwindStyles },
+        { rel: "stylesheet", href: globalStyles },
+        { rel: "stylesheet", href: tooltipStyles }
+    ];
 }
 
 export default App;

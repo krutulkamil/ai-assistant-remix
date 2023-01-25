@@ -32,14 +32,16 @@ const createUserSession = async (userId: IUser["id"], remember: boolean, redirec
     });
 };
 
-export const getUserInfoFromSession = async (request: Request): Promise<IUser | null> => {
+export const getUserInfoFromSession = async (request: Request): Promise<Omit<IUser, "password"> | null> => {
     const userId = await requireUserSession(request);
 
     if (userId) {
         const user = await prisma.user.findUnique({ where: { id: userId } });
 
         if (user) {
-            return user;
+            const { password, ...userInfo } = user;
+            return userInfo;
+
         } else {
             return null;
         }

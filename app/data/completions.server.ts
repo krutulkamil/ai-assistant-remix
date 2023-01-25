@@ -1,7 +1,7 @@
 import { prisma } from "~/data/database.server";
 import type { User as IUser } from "@prisma/client";
 
-const getMostRecentCompletions = async (userId: IUser["id"]) => {
+export const getMostRecentCompletions = async (userId: IUser["id"]) => {
     return prisma.completion.findMany({
         where: { userId },
         orderBy: { createdAt: "desc" },
@@ -9,7 +9,7 @@ const getMostRecentCompletions = async (userId: IUser["id"]) => {
     });
 };
 
-const addCompletion = async ({
+export const addCompletion = async ({
                            userId,
                            aiCompletion,
                            prompt,
