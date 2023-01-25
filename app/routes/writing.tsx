@@ -55,7 +55,7 @@ const WritingPage: FunctionComponent = (): JSX.Element => {
 
     return (
         <div className="text-white">
-            <div className="mx-auto mt-4 flex w-full items-center justify-between text-slate-200">
+            <div className="mx-auto mt-4 flex w-full flex-wrap items-center justify-between text-slate-200">
                 <p>Welcome {user.email}</p>
                 <div className="flex gap-5">
                     <Button
@@ -95,7 +95,7 @@ const WritingPage: FunctionComponent = (): JSX.Element => {
                     {errors && <p className="text-sm text-red-700">{errors.tokens}</p>}
                     {errors && <p className="text-sm text-red-700">{errors.openAI}</p>}
 
-                    <div className="mt-4 flex items-center">
+                    <div className="mt-4 flex flex-wrap items-center">
                         <div className="min-w-fit">
                             <Input
                                 type="number"
@@ -133,7 +133,7 @@ const WritingPage: FunctionComponent = (): JSX.Element => {
             </Form>
             {transition.state && transition.state === "submitting" && (
                 <ClimbingBoxLoader
-                    color="rgb(59 130 246)"
+                    color="#2196F3"
                     loading={transition.state === "submitting"}
                     cssOverride={spinnerOverride}
                     size={30}

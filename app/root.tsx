@@ -9,7 +9,6 @@ import {
     useCatch
 } from "@remix-run/react";
 import tailwindStyles from "./styles/app.css";
-import globalStyles from "./styles/global.css";
 import tooltipStyles from "react-tooltip/dist/react-tooltip.css";
 import Error from "~/components/util/Error";
 import type { FunctionComponent, ReactNode } from "react";
@@ -77,14 +76,13 @@ export const ErrorBoundary: ErrorBoundaryComponent = ({ error }): JSX.Element =>
 
 export const meta: MetaFunction = () => ({
     charset: "utf-8",
-    title: "New Remix App",
+    title: "Remix AI Assistant",
     viewport: "width=device-width,initial-scale=1"
 });
 
 export const links: LinksFunction = () => {
     return [
         { rel: "stylesheet", href: tailwindStyles },
-        { rel: "stylesheet", href: globalStyles },
         { rel: "stylesheet", href: tooltipStyles }
     ];
 }

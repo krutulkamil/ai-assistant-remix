@@ -15,7 +15,7 @@ const Index: FunctionComponent = (): JSX.Element => {
                 <h1 className="text-4xl font-bold text-slate-100">
                     Welcome to the AI Writing Assistant
                 </h1>
-                <div className="mx-auto mt-4 flex w-full items-center justify-between px-10">
+                <div className="mx-auto mt-4 flex w-full flex-wrap items-center justify-between px-10">
                     <p>Welcome {user?.email ?? ""}</p>
                     <div className="flex gap-5">
                         <Button
